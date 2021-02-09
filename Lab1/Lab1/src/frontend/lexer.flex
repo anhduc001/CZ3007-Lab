@@ -17,31 +17,36 @@ import static frontend.Token.Type.*;
 
 %{
 	/* These two methods are for the convenience of rules to create toke objects.
-	* If you do not want to use them, delete them
-	* otherwise add the code in 
-	*/
-	
-	private Token token(Token.Type type) {
-		return new Token(type, yyline, yycolumn, yytext());
-	}
-	
-	/* Use this method for rules where you need to process yytext() to get the lexeme of the token.
-	 *
-	 * Useful for string literals; e.g., the quotes around the literal are part of yytext(),
-	 *       but they should not be part of the lexeme. 
-	*/
-	private Token token(Token.Type type, String text) {
-		return new Token(type, yyline, yycolumn, text.substring(1, text.length - 1);
-	}
+     * If you do not want to use them, delete them
+     * otherwise add the code in
+     */
+    private Token token(Token.Type type) {
+        return new Token(type, yyline, yycolumn, yytext());
+    }
+
+    /* Use this method for rules where you need to process yytext() to get the lexeme of the token.
+     *
+     * Useful for string literals; e.g., the quotes around the literal are part of yytext(),
+     *       but they should not be part of the lexeme.
+     */
+    private Token token(Token.Type type, String text) {
+        if (type == STRING_LITERAL) {
+            text = text.substring(1, text.length() - 1);
+        }
+        return new Token(type, yyline, yycolumn, text);
+    }
 %}
 
 /* This definition may come in handy. If you wish, you can add more definitions here. */
 WhiteSpace = [ ] | \t | \f | \n | \r
-
+Digit = [0-9]
+Letter = [a-zA-Z]
+Identifier = {Letter} [{Digit} || {Letter} || _]*
+IntegerLiteral = [0-9]+
+StringLiteral = \" [^\n\"]* \"
 
 %%
-/* put in your rules here.    */
-//keywords
+/* keywords */
 "boolean"	{return token(BOOLEAN);}
 "break"		{return token(BREAK);}
 "else"		{return token(ELSE);}
@@ -57,7 +62,7 @@ WhiteSpace = [ ] | \t | \f | \n | \r
 "void"		{return token(VOID);}
 "while"		{return token(WHILE);}
 
-//punctuation symbols
+/* punctuation symbols */
 ","		{return token(COMMA);}
 "["		{return token(LBRACKET);}
 "{"		{return token(LCURLY);}
@@ -67,7 +72,7 @@ WhiteSpace = [ ] | \t | \f | \n | \r
 ")"		{return token(RPAREN);}
 ";"		{return token(SEMICOLON);}
 
-//operators
+/* operators */
 "/"		{return token(DIV);}
 "=="	{return token(EQEQ);}
 "="		{return token(EQL);}
@@ -80,9 +85,12 @@ WhiteSpace = [ ] | \t | \f | \n | \r
 "+"		{return token(PLUS);}
 "*"		{return token(TIMES);}
 
-//identifier
+/* identifier */
+{Identifier}                { return new token(ID); }
 
-//literals
+/* literals */
+{IntegerLiteral}            { return new token(INT_LITERAL); }
+{StringLiteral}             { return new token(STRING_LITERAL, yytext()); }
 
 /* You don't need to change anything below this line. */
 .							{ throw new Error("unexpected character '" + yytext() + "'"); }
