@@ -41,8 +41,8 @@ import static frontend.Token.Type.*;
 WhiteSpace = [ ] | \t | \f | \n | \r
 Digit = [0-9]
 Letter = [a-zA-Z]
-Identifier = {Letter} [{Digit} || {Letter} || _]*
-IntegerLiteral = [0-9]+
+Identifier = {Letter} [a-zA-Z0-9_]*
+IntegerLiteral = {Digit}+
 StringLiteral = \" [^\n\"]* \"
 
 %%
@@ -86,11 +86,11 @@ StringLiteral = \" [^\n\"]* \"
 "*"		{return token(TIMES);}
 
 /* identifier */
-{Identifier}                { return new token(ID); }
+{Identifier}                { return token(ID); }
 
 /* literals */
-{IntegerLiteral}            { return new token(INT_LITERAL); }
-{StringLiteral}             { return new token(STRING_LITERAL, yytext()); }
+{IntegerLiteral}            { return token(INT_LITERAL); }
+{StringLiteral}             { return token(STRING_LITERAL, yytext()); }
 
 /* You don't need to change anything below this line. */
 .							{ throw new Error("unexpected character '" + yytext() + "'"); }
