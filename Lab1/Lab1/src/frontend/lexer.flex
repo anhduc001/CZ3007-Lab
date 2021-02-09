@@ -92,6 +92,8 @@ StringLiteral = \" [^\n\"]* \"
 {IntegerLiteral}            { return token(INT_LITERAL); }
 {StringLiteral}             { return token(STRING_LITERAL, yytext()); }
 
+{WhiteSpace}				{/* ignore */}
+
 /* You don't need to change anything below this line. */
 .							{ throw new Error("unexpected character '" + yytext() + "'"); }
 <<EOF>>						{ return token(EOF); }
