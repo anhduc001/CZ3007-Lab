@@ -69,6 +69,47 @@ public class LexerTests {
 				new Token(STRING_LITERAL, 0, 0, "\\n"),
 				new Token(EOF, 0, 4, ""));
 	}
-
+	
+	@Test
+	public void testKeywordAndIdentifier() {
+		runtest("boolean Boolean wHiLe while true True falSe false breaker integer",
+				new Token(BOOLEAN, 0, 0, "boolean"),
+				new Token(ID, 0, 8, "Boolean"),
+				new Token(ID, 0, 16, "wHiLe"),
+				new Token(WHILE, 0, 22, "while"),
+				new Token(TRUE, 0, 28, "true"),
+				new Token(ID, 0, 33, "True"),
+				new Token(ID, 0, 38, "falSe"),
+				new Token(FALSE, 0, 44, "false"),
+				new Token(ID, 0, 50, "breaker"),
+				new Token(ID, 0, 58, "integer"),
+				new Token(EOF, 0, 65, ""));
+	}
+	
+	@Test
+	public void testStringLiteral2() {
+		runtest("\"the\" \"b1g\" brown f0x",
+				new Token(STRING_LITERAL, 0, 0, "the"),
+				new Token(STRING_LITERAL, 0, 6, "b1g"),
+				new Token(ID, 0, 12, "brown"),
+				new Token(ID, 0, 18, "f0x"),
+				new Token(EOF, 0, 21, ""));
+	}
+	
+	@Test
+	public void testIntegerLiteral() {
+		runtest("0203 405 boolean123 -158 7+7=14",
+				new Token(INT_LITERAL, 0, 0, "0203"),
+				new Token(INT_LITERAL, 0, 5, "405"),
+				new Token(ID, 0, 9, "boolean123"),
+				new Token(MINUS, 0, 20, "-"),
+				new Token(INT_LITERAL, 0, 21, "158"),
+				new Token(INT_LITERAL, 0, 25, "7"),
+				new Token(PLUS, 0, 26, "+"),
+				new Token(INT_LITERAL, 0, 27, "7"),
+				new Token(EQL, 0, 28, "="),
+				new Token(INT_LITERAL, 0, 29, "14"),
+				new Token(EOF, 0, 31, ""));
+	}
 
 }
