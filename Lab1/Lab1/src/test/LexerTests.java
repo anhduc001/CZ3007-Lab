@@ -57,7 +57,7 @@ public class LexerTests {
 
 	@Test
 	public void testKeywordAndIdentifier() {
-		runtest("boolean Boolean wHiLe while true True falSe false breaker integer",
+		runtest("boolean Boolean wHiLe while true True falSe false breaker integer break else if import int module public return type void",
 				new Token(BOOLEAN, 0, 0, "boolean"),
 				new Token(ID, 0, 8, "Boolean"),
 				new Token(ID, 0, 16, "wHiLe"),
@@ -68,7 +68,17 @@ public class LexerTests {
 				new Token(FALSE, 0, 44, "false"),
 				new Token(ID, 0, 50, "breaker"),
 				new Token(ID, 0, 58, "integer"),
-				new Token(EOF, 0, 65, ""));
+				new Token(BREAK, 0, 66, "break"),
+				new Token(ELSE, 0, 72, "else"),
+				new Token(IF, 0, 77, "if"),
+				new Token(IMPORT, 0, 80, "import"),
+				new Token(INT, 0, 87, "int"),
+				new Token(MODULE, 0, 91, "module"),
+				new Token(PUBLIC, 0, 98, "public"),
+				new Token(RETURN, 0, 105, "return"),
+				new Token(TYPE, 0, 112, "type"),
+				new Token(VOID, 0, 117, "void"),
+				new Token(EOF, 0, 121, ""));
 	}
 
 	@Test
