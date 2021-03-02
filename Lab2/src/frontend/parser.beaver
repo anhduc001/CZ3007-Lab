@@ -72,13 +72,13 @@ ArrayType = ArrayType LBRACKET RBRACKET
 	  	  | ID LBRACKET RBRACKET
 	  	  ;
 
-ParameterList = NonEmptyParameterList
+ParameterList = Parameter ParameterListTail
 			  | 
-	          ; 
-	          
-NonEmptyParameterList = Parameter COMMA NonEmptyParameterList
-					  | Parameter
-				  	  ;
+	          ;
+
+ParameterListTail = COMMA Parameter ParameterListTail
+                  |
+                  ;
 			
 Parameter = TypeName ID;
 	
@@ -126,8 +126,10 @@ Assignment = LHSExpression EQL Expression;
 LHSExpression = ID
 	    	  | ArrayAccess
 			  ;
-		
-ArrayAccess = LHSExpression LBRACKET Expression RBRACKET;
+
+ArrayAccess = ID LBRACKET Expression RBRACKET
+            | ArrayAccess LBRACKET Expression RBRACKET
+            ;
 
 RHSExpression = ArithmeticExpression OptionalArithmeticExpression;
 
@@ -143,17 +145,21 @@ ComparisonOperator = EQEQ
 			 	   | GEQ
 			 	   ;
 
-ArithmeticExpression = ArithmeticExpression AdditiveOperator Term
-					 | Term
-					 ;		
+ArithmeticExpression = Term ArithmeticExpressionTail;
+
+ArithmeticExpressionTail = AdditiveOperator Term ArithmeticExpressionTail
+                         |
+                         ;
 
 AdditiveOperator = PLUS
 		   		 | MINUS
 		   		 ;				
 
-Term = Term MultiplicativeOperator Factor;
-	 | Factor
-	 ;
+Term = Factor TermTail;
+
+TermTail = MultiplicativeOperator Factor TermTail
+         |
+         ;
 	
 MultiplicativeOperator = TIMES
 					   | DIV
@@ -179,9 +185,11 @@ ExpressionList = NonEmptyExpressionList
 			   | 
 			   ;
 			   
-NonEmptyExpressionList = Expression COMMA NonEmptyExpressionList
-					   | Expression
-					   ;
+NonEmptyExpressionList = Expression NonEmptyExpressionListTail;
+
+NonEmptyExpressionListTail = COMMA Expression NonEmptyExpressionListTail
+                           |
+                           ;
 				
 ArrayExpression = LBRACKET NonEmptyExpressionList RBRACKET;
 
