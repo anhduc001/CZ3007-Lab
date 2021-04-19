@@ -134,4 +134,294 @@ public class CompilerTests {
 				new Object[0],
 				42);
 	}
+
+	@Test public void testFibo() {
+		runtest("module Test {" +
+						"  public int f(int x) {" +
+						"    if(x<=2) {return 1;} " +
+						"    else {return f(x-1) + f(x-2); }" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[] { int.class },
+				new Object [] {6},
+				8);
+	}
+
+	@Test public void testBoolean() {
+		runtest("module Test {" +
+						"  public boolean f() {" +
+						"    boolean x;" +
+						"    x = false;" +
+						"    return x;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				false);
+	}
+
+	@Test public void testString() {
+		runtest("module Test {" +
+						"public type string = \"java.lang.String\";  " +
+						"  public string f() {" +
+						"    string x;" +
+						"    x = \"Hello World\";   " +
+						"    return x;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				"Hello World");
+	}
+
+	@Test public void testWhile() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int x;" +
+						"    x = 0;   " +
+						"	 while(x<5){" +
+						"       x = x + 1;}" +
+						"    return x;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				5);
+	}
+
+	@Test public void testBreak() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"  		int x;" +
+						"  		x = 5;" +
+						"    	while(x < 15){" +
+						"			x = 10; break;" +
+						"		} return x;" +
+						"}}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				10);
+	}
+
+	@Test public void testArray3() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int[] a; " +
+						"    a = [1,2,3];  " +
+						"    return a[1+1];" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				3);
+	}
+
+	//			x[5]
+//			b[4][7]
+//			a[i+1]
+	@Test public void testArray1() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int[] a; " +
+						"    a = [1,2,3];  " +
+						"    return a[2];" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				3);
+	}
+	@Test public void testArray2() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int[][] a; " +
+						"    a = [[1,2,3],[4,5]];  " +
+						"    return a[1][0];" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				4);
+	}
+
+	@Test public void testSubtraction() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return 42-19;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				23);
+	}
+
+	@Test public void testMultiplication() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return 2*21;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				42);
+	}
+
+	@Test public void testDivision() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return 42/2;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				21);
+	}
+
+	@Test public void testPrecedence() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return 2+42/2;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				23);
+	}
+
+	@Test public void testParentheses() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return (2+42)/2;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				22);
+	}
+
+	@Test public void testNegation() {
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return -42;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				-42);
+	}
+
+	@Test
+	public void testIntConstant(){
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    return 42;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				42);
+	}
+
+	@Test
+	public void testArray(){
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int[] arr;" +
+						"    arr = [1, 2, 3];" +
+						"    return 4;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				4);
+	}
+
+	@Test
+	public void testArrayIndex(){
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int[] arr;" +
+						"    arr = [7, 2, 3];" +
+						"    return arr[0];" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				7);
+	}
+
+	@Test
+	public void testAssignment(){
+		runtest("module Test {" +
+						"  public int f() {" +
+						"    int a;" +
+						"    a = 3;" +
+						"    return a;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				3);
+	}
+
+	@Test
+	public void testComparison(){
+		runtest("module Test {" +
+						"  public boolean f() {" +
+						"    return  5 <= 4;" +
+						"  }" +
+						"}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				false);
+	}
+
+	@Test
+	public void testIf() {
+		runtest("module Test {public int f() {if(0)return 1;else return 2;}}",
+				"Test",
+				"f",
+				new Class<?>[0],
+				new Object[0],
+				2);
+	}
+
 }
