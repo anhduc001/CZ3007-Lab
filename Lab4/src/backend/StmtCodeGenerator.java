@@ -51,6 +51,9 @@ public class StmtCodeGenerator extends Visitor<Void> {
 	public Void visitBreakStmt(BreakStmt nd) {
 		/* TODO: generate code for break statement (hint: use ASTNode.getEnclosingLoop and breakTargets;
 		 *       use units.add() to insert the statement into the surrounding method) */
+		WhileStmt whileNd = nd.getEnclosingLoop();
+		Unit target = breakTargets.get(whileNd);
+		units.add(j.newGotoStmt(target));
 		return null;
 	}
 
@@ -98,6 +101,17 @@ public class StmtCodeGenerator extends Visitor<Void> {
 		/* TODO: generate code for while statement as discussed in lecture; add the NOP statement you
 		 *       generate as the break target to the breakTargets map
 		 */
+		NopStmt label0 = j.newNopStmt();
+		NopStmt label1 = j.newNopStmt();
+		// Add label1 to breakTargets
+		breakTargets.put(nd, label1);
+
+		units.add(label0);
+		Value cond = ExprCodeGenerator.generate(nd.getExpr(), fcg);
+		units.add(j.newIfStmt(j.newEqExpr(cond, IntConstant.v(0)), label1));
+		nd.getBody().accept(this);
+		units.add(j.newGotoStmt(label0));
+		units.add(label1);
 		return null;
 	}
 }
